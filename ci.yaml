@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  cardgameapici:
+    container_name: cardgameapici
+    build:
+      context: .
+      target: ci
+    volumes:
+      - .:/app

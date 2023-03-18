@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  cardgameapi:
+    container_name: cardgameapi
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+      - 2345:2345
