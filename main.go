@@ -5,11 +5,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"solaiman.me/cardgameapi/src/api"
 	"solaiman.me/cardgameapi/src/thegame"
 )
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
+	requestHandler := api.NewHandler(thegame.CreateCardService())
 
 	// Ping test
 	r.GET("/health", func(c *gin.Context) {
@@ -18,27 +20,7 @@ func setupRouter() *gin.Engine {
 		})
 	})
 
-	r.GET("/cards", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"cards": []thegame.Card{
-				{
-					Value: "ACE",
-					Suit:  "SPADES",
-					Code:  "AS",
-				},
-				{
-					Value: "KING",
-					Suit:  "HEARTS",
-					Code:  "KH",
-				},
-				{
-					Value: "8",
-					Suit:  "CLUBS",
-					Code:  "8C",
-				},
-			},
-		})
-	})
+	r.GET("/cards", api.GetCardsHandler(requestHandler))
 
 	r.POST("/deck", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
