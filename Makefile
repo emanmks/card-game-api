@@ -25,11 +25,15 @@ stop:
 	docker-compose down
 
 ## Run unit test
-test/unit:
+ci/unit-test:
 	docker-compose -f ci.yaml build
-	docker-compose -f ci.yaml run --rm cardgameapici go test
+	docker-compose -f ci.yaml run --rm ci go test
 
 ## Run static check
-check:
+ci/static-check:
 	docker-compose -f ci.yaml build
-	docker-compose -f ci.yaml run --rm cardgameapici staticcheck
+	docker-compose -f ci.yaml run --rm ci staticcheck
+
+## Remove CI artifacts
+ci/clean:
+	docker-compose -f ci.yaml down

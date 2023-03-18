@@ -36,7 +36,7 @@ make stop
 
 ## Todo list
 
-- [ ] Create skeleton
+- [x] Create skeleton
 - [ ] Consumer can see a list of available cards and their code
 - [ ] Consumer can create a new deck
 - [ ] Consumer can open a deck

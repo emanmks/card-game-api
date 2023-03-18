@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  cardgameapici:
-    container_name: cardgameapici
+  ci:
+    container_name: ci
     build:
       context: .
       target: ci

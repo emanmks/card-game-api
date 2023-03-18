@@ -16,8 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Clean Up
+        run: make ci/clean
+
       - name: Static Check
-        run: make check
+        run: make ci/static-check
 
       - name: Unit Test
-        run: make test/unit
+        run: make ci/unit-test
