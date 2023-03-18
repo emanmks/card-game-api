@@ -19,13 +19,13 @@ make start
 Run unit test:
 
 ```bash
-make test/unit
+make ci/unit-test
 ```
 
 Run static checking:
 
 ```bash
-make check
+make ci/static-check
 ```
 
 Stop container:
