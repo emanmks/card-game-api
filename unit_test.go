@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"solaiman.me/cardgameapi/src/thegame"
 )
 
 type HealthCheck struct {
@@ -20,14 +21,14 @@ type NewDeckResponse struct {
 }
 
 type DeckDetailsResponse struct {
-	Id        string `json:"id"`
-	Shuffled  bool   `json:"shuffled"`
-	Remaining int    `json:"remaining"`
-	Cards     []Card `json:"cards"`
+	Id        string         `json:"id"`
+	Shuffled  bool           `json:"shuffled"`
+	Remaining int            `json:"remaining"`
+	Cards     []thegame.Card `json:"cards"`
 }
 
 type DrawResponse struct {
-	Cards []Card `json:"cards"`
+	Cards []thegame.Card `json:"cards"`
 }
 
 func TestHealthCheckEndpoint(t *testing.T) {
@@ -51,7 +52,7 @@ func TestCardsRoute(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "/cards", nil)
 	router.ServeHTTP(rr, req)
 
-	var cards []Card
+	var cards []thegame.Card
 	json.Unmarshal(rr.Body.Bytes(), &cards)
 
 	assert.Equal(t, http.StatusOK, rr.Code, "Http status code should be OK")

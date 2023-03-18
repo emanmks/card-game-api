@@ -27,7 +27,7 @@ stop:
 ## Run unit test
 ci/unit-test:
 	docker-compose -f ci.yaml build
-	docker-compose -f ci.yaml run --rm ci go test
+	docker-compose -f ci.yaml run --rm ci go test ./...
 
 ## Run static check
 ci/static-check:
