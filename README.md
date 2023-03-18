@@ -34,6 +34,10 @@ Stop container:
 make stop
 ```
 
+## Live
+
+Live version can be found here: [https://dry-bush-2591.fly.dev/health](https://dry-bush-2591.fly.dev/health)
+
 ## Todo list
 
 - [x] Create skeleton
