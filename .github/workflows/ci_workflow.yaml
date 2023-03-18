@@ -1,0 +1,23 @@
+name: solaiman.me/cardgameapi/ci
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Static Check
+        run: make check
+
+      - name: Unit Test
+        run: make test/unit
