@@ -5,13 +5,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"solaiman.me/cardgameapi/src/thegame"
 )
-
-type Card struct {
-	Value string `json:"value"`
-	Code  string `json:"code"`
-	Suit  string `json:"suit"`
-}
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
@@ -25,7 +20,7 @@ func setupRouter() *gin.Engine {
 
 	r.GET("/cards", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"cards": []Card{
+			"cards": []thegame.Card{
 				{
 					Value: "ACE",
 					Suit:  "SPADES",
@@ -58,7 +53,7 @@ func setupRouter() *gin.Engine {
 			"id":        "a251071b-662f-44b6-ba11-e24863039c59",
 			"shuffled":  false,
 			"remaining": 3,
-			"cards": []Card{
+			"cards": []thegame.Card{
 				{
 					Value: "ACE",
 					Suit:  "SPADES",
@@ -80,7 +75,7 @@ func setupRouter() *gin.Engine {
 
 	r.POST("/draw", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"cards": []Card{
+			"cards": []thegame.Card{
 				{
 					Value: "ACE",
 					Suit:  "SPADES",
