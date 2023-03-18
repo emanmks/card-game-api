@@ -29,7 +29,7 @@ EXPOSE 2345
 
 ENTRYPOINT ["air"]
 
-### Development with hot reload and debugger
+### CI
 FROM base AS ci
 WORKDIR /app
 
@@ -39,3 +39,33 @@ RUN go install honnef.co/go/tools/cmd/staticcheck@latest
 RUN apk add --no-cache gcc g++ sqlite
 
 CMD ["go"]
+
+### Executable builder
+FROM base AS builder
+WORKDIR /app
+
+ENV GOFLAGS="-buildvcs=false"
+RUN apk add --no-cache gcc g++ sqlite
+
+# Application dependencies
+COPY . /app
+RUN go mod download \
+    && go mod verify
+
+RUN go build -o card-game-api -a .
+
+### Production
+FROM alpine:latest
+
+RUN apk update \
+    && apk add --no-cache \
+    ca-certificates \
+    curl \
+    tzdata \
+    && update-ca-certificates
+
+# Copy executable
+COPY --from=builder /app/card-game-api /usr/local/bin/card-game-api
+EXPOSE 8080
+
+ENTRYPOINT ["/usr/local/bin/card-game-api"]
