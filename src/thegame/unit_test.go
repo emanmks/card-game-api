@@ -1,14 +1,16 @@
-package thegame
+package thegame_test
 
 import (
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"solaiman.me/cardgameapi/src/repository/inmemory"
+	"solaiman.me/cardgameapi/src/thegame"
 )
 
 func TestCanProvideListOfCards(t *testing.T) {
-	service := CreateCardService()
+	service := thegame.CreateCardService(inmemory.NewInMemoryRepository())
 
 	cards := service.LoadAll()
 
@@ -20,10 +22,10 @@ func TestCanProvideListOfCards(t *testing.T) {
 }
 
 func TestCanFilterCardsByListOfCodesInAString(t *testing.T) {
-	service := CreateCardService()
+	service := thegame.CreateCardService(inmemory.NewInMemoryRepository())
 
 	codes := "AS,2S"
-	filteredCards := service.FilterCard(service.cards, codes)
+	filteredCards := service.FilterCard(service.LoadAll(), codes)
 
 	for _, card := range filteredCards {
 		assert.True(t, strings.Contains(codes, card.Code), "Card Value is found in the code list string")
