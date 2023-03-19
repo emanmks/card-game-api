@@ -52,3 +52,7 @@ func (s *CardService) CreateNewDeck(shuffled bool, cardCodes string) Deck {
 
 	return newDeck
 }
+
+func (s *CardService) GetDeck(deckId string) (Deck, error) {
+	return s.repo.GetDeck(deckId)
+}

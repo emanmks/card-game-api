@@ -2,6 +2,8 @@ package inmemory
 
 import (
 	"errors"
+	"fmt"
+	"log"
 
 	"github.com/google/uuid"
 	"solaiman.me/cardgameapi/src/thegame"
@@ -97,6 +99,7 @@ func (r *inMemoryRepository) NewDeck(deck *thegame.Deck) error {
 
 func (r *inMemoryRepository) GetDeck(id string) (thegame.Deck, error) {
 	for _, deck := range r.decks {
+		log.Println(fmt.Sprintf("Deck Id: %s , while given Id: %s", deck.Id, id))
 		if deck.Id == id {
 			return deck, nil
 		}

@@ -21,34 +21,17 @@ func setupRouter() *gin.Engine {
 		})
 	})
 
+	// Get card list
 	r.GET("/cards", api.GetCardsHandler(requestHandler))
+
+	// Get Deck list
 	r.GET("/decks", api.GetDecksHandler(requestHandler))
+
+	// POST a new deck
 	r.POST("/deck", api.PostDeckHandler(requestHandler))
 
-	r.GET("/deck/:id", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"id":        "a251071b-662f-44b6-ba11-e24863039c59",
-			"shuffled":  false,
-			"remaining": 3,
-			"cards": []thegame.Card{
-				{
-					Value: "ACE",
-					Suit:  "SPADES",
-					Code:  "AS",
-				},
-				{
-					Value: "KING",
-					Suit:  "HEARTS",
-					Code:  "KH",
-				},
-				{
-					Value: "8",
-					Suit:  "CLUBS",
-					Code:  "8C",
-				},
-			},
-		})
-	})
+	// Get a single deck
+	r.GET("/deck/:id", api.GetDeckHandler(requestHandler))
 
 	r.POST("/draw", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

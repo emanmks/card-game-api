@@ -42,6 +42,6 @@ Live version can be found here: [https://dry-bush-2591.fly.dev/health](https://d
 
 - [x] Create skeleton
 - [x] Consumer can see a list of available cards and their code
-- [ ] Consumer can create a new deck
-- [ ] Consumer can open a deck
+- [x] Consumer can create a new deck
+- [x] Consumer can open a deck
 - [ ] Consumer can request a draw for a specific deck
