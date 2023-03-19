@@ -20,7 +20,10 @@ type DeckRequestBody struct {
 func PostDeckHandler(handler RequestHandler) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var data DeckRequestBody
-		c.Bind(&data)
+		if err := c.ShouldBind(&data); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+			return
+		}
 
 		deck := handler.cardService.CreateNewDeck(data.Shuffled, data.Cards)
 

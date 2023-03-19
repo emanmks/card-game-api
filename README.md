@@ -8,6 +8,12 @@ REST api for card games.
 - Docker Enginer
 - Docker Compose
 
+## Code Structure
+
+- `src/thegame`: **Business logic** where entities, interfaces, and the logic located.
+- `src/repository`: **Data layer** where developer can implement a different type of database driver.
+- `src/api`: **API** the api handlers to exposed endpoints to public and consume the business logic to deliver resources.
+
 ## Development how-to
 
 Start the api container:
