@@ -81,32 +81,32 @@ func TestPostDeckEndpointTest(t *testing.T) {
 	assert.NotEmpty(t, newDeckResponse.Remaining, "Deck Remaining should be available in the response")
 }
 
-// // Todo Fix this test
-// func TestGetDeckEndpointTest(t *testing.T) {
-// 	router := setupRouter()
+func TestGetDeckEndpointTest(t *testing.T) {
+	router := setupRouter()
 
-// 	rr := httptest.NewRecorder()
+	postrr := httptest.NewRecorder()
 
-// 	jsonParam := `{"shuffled":false}`
-// 	postReq, _ := http.NewRequest(http.MethodPost, "/deck", strings.NewReader(string(jsonParam)))
-// 	router.ServeHTTP(rr, postReq)
+	jsonParam := `{"shuffled":false}`
+	postReq, _ := http.NewRequest(http.MethodPost, "/deck", strings.NewReader(string(jsonParam)))
+	router.ServeHTTP(postrr, postReq)
 
-// 	var newDeckResponse NewDeckResponse
-// 	json.Unmarshal(rr.Body.Bytes(), &newDeckResponse)
+	var newDeckResponse NewDeckResponse
+	json.Unmarshal(postrr.Body.Bytes(), &newDeckResponse)
 
-// 	findUri := "/deck/" + newDeckResponse.Id
-// 	req, _ := http.NewRequest(http.MethodGet, findUri, nil)
-// 	router.ServeHTTP(rr, req)
+	getrr := httptest.NewRecorder()
+	findUri := "/deck/" + newDeckResponse.Id
+	req, _ := http.NewRequest(http.MethodGet, findUri, nil)
+	router.ServeHTTP(getrr, req)
 
-// 	var deckResponse DeckDetailsResponse
-// 	json.Unmarshal(rr.Body.Bytes(), &deckResponse)
+	var deckResponse DeckDetailsResponse
+	json.Unmarshal(getrr.Body.Bytes(), &deckResponse)
 
-// 	assert.Equal(t, http.StatusOK, rr.Code, "Http status code should be OK")
-// 	assert.NotEmpty(t, deckResponse.Id, "Deck Id should be available in the response")
-// 	assert.IsType(t, false, deckResponse.Shuffled, "Deck Shuffled flag should be available in the response")
-// 	assert.NotEmpty(t, deckResponse.Remaining, "Deck Remaining should be available in the response")
-// 	assert.NotEmpty(t, deckResponse.Cards, "Deck Remaining Cards should be available in the response")
-// }
+	assert.Equal(t, http.StatusOK, getrr.Code, "Http status code should be OK")
+	assert.NotEmpty(t, deckResponse.Id, "Deck Id should be available in the response")
+	assert.IsType(t, false, deckResponse.Shuffled, "Deck Shuffled flag should be available in the response")
+	assert.NotEmpty(t, deckResponse.Remaining, "Deck Remaining should be available in the response")
+	assert.NotEmpty(t, deckResponse.Cards, "Deck Remaining Cards should be available in the response")
+}
 
 func TestPostDrawEndpointTest(t *testing.T) {
 	router := setupRouter()
