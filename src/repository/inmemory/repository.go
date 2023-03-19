@@ -2,8 +2,6 @@ package inmemory
 
 import (
 	"errors"
-	"fmt"
-	"log"
 
 	"github.com/google/uuid"
 	"solaiman.me/cardgameapi/src/thegame"
@@ -12,6 +10,7 @@ import (
 type inMemoryRepository struct {
 	cards []thegame.Card
 	decks []thegame.Deck
+	draws []thegame.Draw
 }
 
 func NewInMemoryRepository() thegame.GameRepository {
@@ -99,11 +98,36 @@ func (r *inMemoryRepository) NewDeck(deck *thegame.Deck) error {
 
 func (r *inMemoryRepository) GetDeck(id string) (thegame.Deck, error) {
 	for _, deck := range r.decks {
-		log.Println(fmt.Sprintf("Deck Id: %s , while given Id: %s", deck.Id, id))
 		if deck.Id == id {
 			return deck, nil
 		}
 	}
 
 	return thegame.Deck{}, errors.New("Deck is not found")
+}
+
+func (r *inMemoryRepository) UpdateDeck(targetDeck thegame.Deck) error {
+	decks := r.decks
+	for i := 0; i < len(decks); i++ {
+		if decks[i].Id == targetDeck.Id {
+			decks[i] = targetDeck
+		}
+	}
+
+	r.decks = decks
+
+	return nil
+}
+
+func (r *inMemoryRepository) NewDraw(draw *thegame.Draw) error {
+	NewDraw := thegame.Draw{
+		Id:    uuid.New().String(),
+		Deck:  draw.Deck,
+		Cards: draw.Cards,
+	}
+
+	r.draws = append(r.draws, NewDraw)
+	draw.Id = NewDraw.Id
+
+	return nil
 }
