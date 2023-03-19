@@ -40,7 +40,14 @@ Stop container:
 make stop
 ```
 
+## Rules
+
+- `main` is the main branch
+- Do not force push to main branch, instead create a PR and make sure all checks are passed
+
 ## Live
+
+The new version will be auto-deployed whenever merge request is merged to main branch.
 
 Live version can be found here: [https://dry-bush-2591.fly.dev/health](https://dry-bush-2591.fly.dev/health)
 
