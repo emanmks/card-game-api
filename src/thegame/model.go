@@ -11,3 +11,9 @@ type Deck struct {
 	Shuffled bool   `json:"shuffled"`
 	Cards    []Card `json:"cards"`
 }
+
+type Draw struct {
+	Id    string `json:"id"`
+	Deck  Deck   `json:"deck"`
+	Cards []Card `json:"cards"`
+}

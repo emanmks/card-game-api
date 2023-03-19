@@ -5,4 +5,6 @@ type GameRepository interface {
 	GetDecks() []Deck
 	NewDeck(deck *Deck) error
 	GetDeck(id string) (Deck, error)
+	NewDraw(draw *Draw) error
+	UpdateDeck(targetDeck Deck) error
 }

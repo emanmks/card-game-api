@@ -33,27 +33,8 @@ func setupRouter() *gin.Engine {
 	// Get a single deck
 	r.GET("/deck/:id", api.GetDeckHandler(requestHandler))
 
-	r.POST("/draw", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"cards": []thegame.Card{
-				{
-					Value: "ACE",
-					Suit:  "SPADES",
-					Code:  "AS",
-				},
-				{
-					Value: "KING",
-					Suit:  "HEARTS",
-					Code:  "KH",
-				},
-				{
-					Value: "8",
-					Suit:  "CLUBS",
-					Code:  "8C",
-				},
-			},
-		})
-	})
+	// Post a draw
+	r.POST("/draw", api.PostDrawHandler(requestHandler))
 
 	return r
 }

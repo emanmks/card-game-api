@@ -57,4 +57,4 @@ Live version can be found here: [https://dry-bush-2591.fly.dev/health](https://d
 - [x] Consumer can see a list of available cards and their code
 - [x] Consumer can create a new deck
 - [x] Consumer can open a deck
-- [ ] Consumer can request a draw for a specific deck
+- [x] Consumer can request a draw for a specific deck

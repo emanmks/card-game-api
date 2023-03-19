@@ -57,6 +57,8 @@ RUN go build -o card-game-api -a .
 ### Production
 FROM alpine:latest
 
+ENV GIN_MODE=release
+
 RUN apk update \
     && apk add --no-cache \
     ca-certificates \

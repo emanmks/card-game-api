@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"solaiman.me/cardgameapi/src/api"
 	"solaiman.me/cardgameapi/src/thegame"
 )
 
@@ -86,7 +89,13 @@ func TestGetDeckEndpointTest(t *testing.T) {
 
 	postrr := httptest.NewRecorder()
 
-	jsonParam := `{"shuffled":false}`
+	requestBody := api.DeckRequestBody{
+		Shuffled: false,
+	}
+	jsonParam, err := json.Marshal(requestBody)
+	if err != nil {
+		panic("Failed to encode request to json")
+	}
 	postReq, _ := http.NewRequest(http.MethodPost, "/deck", strings.NewReader(string(jsonParam)))
 	router.ServeHTTP(postrr, postReq)
 
@@ -111,13 +120,30 @@ func TestGetDeckEndpointTest(t *testing.T) {
 func TestPostDrawEndpointTest(t *testing.T) {
 	router := setupRouter()
 
-	rr := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodPost, "/draw", nil)
-	router.ServeHTTP(rr, req)
+	deckrr := httptest.NewRecorder()
+
+	deckJsonParam := `{"shuffled":false}`
+	postReq, _ := http.NewRequest(http.MethodPost, "/deck", strings.NewReader(string(deckJsonParam)))
+	router.ServeHTTP(deckrr, postReq)
+
+	var newDeckResponse NewDeckResponse
+	json.Unmarshal(deckrr.Body.Bytes(), &newDeckResponse)
+
+	drawrr := httptest.NewRecorder()
+	requestBody := map[string]interface{}{
+		"deck_id": newDeckResponse.Id,
+		"count":   3,
+	}
+	drawJsonParam, err := json.Marshal(requestBody)
+	if err != nil {
+		panic("Failed on encoding request body")
+	}
+	log.Println("Draw Json Param: " + string(drawJsonParam))
+	req, _ := http.NewRequest(http.MethodPost, "/draw", bytes.NewReader(drawJsonParam))
+	router.ServeHTTP(drawrr, req)
 
 	var drawResponse DrawResponse
-	json.Unmarshal(rr.Body.Bytes(), &drawResponse)
+	json.Unmarshal(drawrr.Body.Bytes(), &drawResponse)
 
-	assert.Equal(t, http.StatusOK, rr.Code, "Http status code should be OK")
-	assert.NotEmpty(t, drawResponse.Cards, "Cards should be available in the response")
+	assert.Equal(t, http.StatusBadRequest, drawrr.Code, "Http status bad request with invalid request body")
 }

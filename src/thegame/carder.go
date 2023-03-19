@@ -1,6 +1,8 @@
 package thegame
 
 import (
+	"errors"
+	"math/rand"
 	"strings"
 )
 
@@ -55,4 +57,69 @@ func (s *CardService) CreateNewDeck(shuffled bool, cardCodes string) Deck {
 
 func (s *CardService) GetDeck(deckId string) (Deck, error) {
 	return s.repo.GetDeck(deckId)
+}
+
+func (s *CardService) Shuffle(cards []Card, count uint) []Card {
+	rand.Shuffle(len(cards), func(i, j int) {
+		cards[i], cards[j] = cards[j], cards[i]
+	})
+
+	if count > uint(len(cards)) {
+		return cards
+	}
+
+	return cards[0:count]
+}
+
+func (s *CardService) Draw(deckId string, count uint) (Draw, error) {
+	deck, err := s.GetDeck(deckId)
+	if err != nil {
+		return Draw{}, errors.New("Can not draw the unknown deck")
+	}
+
+	var cards []Card
+
+	if deck.Shuffled {
+		cards = s.Shuffle(deck.Cards, count)
+	} else {
+		cards = deck.Cards[0:count]
+	}
+
+	newDraw := Draw{
+		Deck:  deck,
+		Cards: cards,
+	}
+
+	if s.repo.NewDraw(&newDraw) != nil {
+		return Draw{}, errors.New("Failed creating a new deck")
+	}
+
+	deck.Cards = s.extractRemainingCards(deck.Cards, cards)
+	if s.repo.UpdateDeck(deck) != nil {
+		return Draw{}, errors.New("Failed updating the deck")
+	}
+
+	return newDraw, nil
+}
+
+func (s *CardService) extractRemainingCards(source []Card, target []Card) []Card {
+	var remainingCards []Card
+
+	for _, card := range source {
+		if !s.contains(target, card) {
+			remainingCards = append(remainingCards, card)
+		}
+	}
+
+	return remainingCards
+}
+
+func (s *CardService) contains(cards []Card, card Card) bool {
+	for _, v := range cards {
+		if v == card {
+			return true
+		}
+	}
+
+	return false
 }
