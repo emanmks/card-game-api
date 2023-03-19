@@ -6,12 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"solaiman.me/cardgameapi/src/api"
+	"solaiman.me/cardgameapi/src/repository/inmemory"
 	"solaiman.me/cardgameapi/src/thegame"
 )
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	requestHandler := api.NewHandler(thegame.CreateCardService())
+	requestHandler := api.NewHandler(thegame.CreateCardService(inmemory.NewInMemoryRepository()))
 
 	// Ping test
 	r.GET("/health", func(c *gin.Context) {
@@ -21,14 +22,8 @@ func setupRouter() *gin.Engine {
 	})
 
 	r.GET("/cards", api.GetCardsHandler(requestHandler))
-
-	r.POST("/deck", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"id":        "a251071b-662f-44b6-ba11-e24863039c59",
-			"shuffled":  false,
-			"remaining": 30,
-		})
-	})
+	r.GET("/decks", api.GetDecksHandler(requestHandler))
+	r.POST("/deck", api.PostDeckHandler(requestHandler))
 
 	r.GET("/deck/:id", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
